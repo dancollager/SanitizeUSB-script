@@ -242,8 +242,6 @@ void automatic(){
     float rate = 100 - (no_empty / size_device); 
     printf("\n Sterilization percentage: %f %% \n", rate);
     fclose(file);
-    printf("%s\n", general);
-    printf("%s\n", general1);
 	}
 
 void format(){
@@ -255,8 +253,12 @@ void format(){
 	strcat(join, name);
 	strcat(join," /");
 	strcat(join, device[deviceID-1]);
-    char ccount = (char)partitionID;
-    if(count != 0 & partitionID !=0) strcat(join, ccount+" ");	
+    char id [255];
+    sprintf(id, "%s%d", base_string, partitionID);
+    if(count != 0 & partitionID !=0) {
+    	if(strncmp(device[deviceID-1],"dev/mmcblk0",9)==0) strcat(join, "p");
+    	strcat(join, id);	
+    }  
     result = system(join);  
 }
 
@@ -264,8 +266,12 @@ void umount() {
 	char general[255];
 	strcpy(general, "umount /");
 	strcat(general, device[deviceID-1]);
-    char ccount = (char)partitionID;
-    if(count != 0 & partitionID !=0) strcat(general, ccount+" ");	
+    char id [255];
+    sprintf(id, "%s%d", base_string, partitionID);
+    if(count != 0 & partitionID !=0) {
+    	if(strncmp(device[deviceID-1],"dev/mmcblk0",9)==0) strcat(general, "p");
+    	strcat(general, id);	
+    }  
     result = system(general);  
     format();
 }
